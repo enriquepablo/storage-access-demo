@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTML 5 Boilerplate</title>
+  </head>
+  <body>
+	<script type="text/javascript">
+
+    window.onload = () => {
+      // Set a hasAccess boolean variable which defaults to false.
+      let hasAccess = false;
+
+      async function handleCookieAccessInit() {
+        if (!document.hasStorageAccess) {
+          // Storage Access API is not supported so best we can do is
+          // hope it's an older browser that doesn't block 3P cookies.
+          console.log('Storage access not supported');
+          hasAccess = true;
+        } else {
+          // Check whether access has been granted via the Storage Access API.
+          // Note on page load this will always be false initially so we could be
+          // skipped in this example, but including for completeness for when this
+          // is not so obvious.
+          hasAccess = await document.hasStorageAccess();
+          if (!hasAccess) {
+            console.log('no access for now');
+            try {
+              await document.requestStorageAccess();
+              hasAccess = true; // Can assume this was true if above did not reject.
+              console.log('Access granted');
+            } catch (err) {
+              // Access was not granted.
+              console.log(`Access denied: ${err}`);
+              return;
+            }
+          }
+        }
+        if (hasAccess) {
+          const cookieValue = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("sa-choice="))
+            ?.split("=")[1];
+          console.log(`Cookie read: ${cookieValue}`);
+          if (cookieValue !== undefined) {
+            document.getElementById('value-holder').innerHTML = cookieValue;
+          } else {
+            document.getElementById('value-holder').innerHTML = 'unset';
+          }
+        }
+      }
+      handleCookieAccessInit();
+
+      const button = document.getElementById('main-button');
+      button.addEventListener('click', async (e) => {
+        await document.requestStorageAccess();
+        window.parent.location = 'https://guest.test';
+      });
+    }
+
+  </script>
+  <h3>SeamlessAccess iframe</h3>
+  <button id="main-button">SeamlessAccess</button>
+  <p>Chosen IdP: <span id="value-holder">Unset</span><p>
+  </body>
+</html>
