@@ -16,7 +16,7 @@
           const data = self.dataset.choice;
 
           var date = new Date();
-          date.setTime(date.getTime() + (1*60*60*1000));
+          date.setTime(date.getTime() + (2*60*1000));
           expires = "; expires=" + date.toUTCString();
 
           document.cookie = `sa-choice=${data}; Path=/; Expires=${expires}; Secure; SameSite=None;`;
@@ -32,6 +32,13 @@
       } else {
         document.getElementById('value-holder').innerHTML = 'No stored IdP';
       }
+
+      //const choosers = Array.from(document.getElementsByClassName('sp-chooser'));
+      //choosers.forEach(chooser => {
+        //chooser.addEventListener('click', async (event) => {
+          //window.location = event.target.dataset.href;
+        //});
+      //});
     }
   </script>
   <h1>SeamlessAccess Page</h1>
@@ -41,7 +48,7 @@
     <li><button class="sa-choice" data-choice="https://three.idp">Choose IdP three</button></li>
   </ul>
   <p><span id="value-holder"></span><p>
-  <p><a href="https://host1.test">Service provider 1</a><p>
-  <p><a href="https://host2.test">Service provider 2</a><p>
+  <p><a href="https://host1.test" class="sp-chooser">Service provider 1</a><p>
+  <p><a href="https://host2.test" class="sp-chooser">Service provider 2</a><p>
   </body>
 </html>
