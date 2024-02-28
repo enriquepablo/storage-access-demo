@@ -102,8 +102,12 @@
 
     const button = document.getElementById('main-button');
     button.addEventListener('click', async (e) => {
-      await document.requestStorageAccess();
-      window.parent.location = 'https://guest.test';
+      try {
+        await document.requestStorageAccess();
+      } catch(err) {
+        console.log(`error requesting storage access: ${err}`);
+      }
+      window.parent.location = 'https://guest.test.guest';
     });
   }
 
